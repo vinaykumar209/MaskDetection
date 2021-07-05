@@ -25,9 +25,12 @@ class VideoCamera(object):
 
             roi = cv2.resize(fc, (100, 100))
             pred = model.predict_emotion(roi[np.newaxis, :, :, np.newaxis])
-
-            cv2.putText(fr, pred, (x, y), font, 1, (255, 255, 0), 2)
-            cv2.rectangle(fr,(x,y),(x+w,y+h),(255,0,0),2)
+            if pred=="with_mask":
+                cv2.putText(fr, pred, (x, y), font, 1, (0, 255, 0), 2)
+                cv2.rectangle(fr,(x,y),(x+w,y+h),(0,255,0),2)
+            else:
+                cv2.putText(fr, pred, (x, y), font, 1, (0, 0, 255), 2)
+                cv2.rectangle(fr,(x,y),(x+w,y+h),(0,0,255),2)
 
         _, jpeg = cv2.imencode('.jpg', fr)
         return jpeg.tobytes()
